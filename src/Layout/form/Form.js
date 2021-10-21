@@ -1,9 +1,9 @@
-import React from "react";
-import Proptypes from "prop-types";
-import {useParms, useHistory} from "react-router";
-import {readDeck, readCard} from "../../utils/api/index";
+import React, { useState, useEffect } from "react";
+import { useParams, useHistory } from "react-router";
+import { readDeck, readCard } from "../../utils/api/index";
 import Breadcrumb from "../comp/Breadcrumb";
 import FormArea from "./FormArea";
+import PropTypes from "prop-types";
 
 function Form({ type, edit, addDeck, addCard, editDeck, editCard, abortController }) {
 	const history = useHistory();
@@ -19,14 +19,19 @@ function Form({ type, edit, addDeck, addCard, editDeck, editCard, abortControlle
 	const [deck, setDeck] = useState({});
 	const [formData, setFormData] = useState({...initForm});
 
+	// get deck when first rendered.
 	useEffect(() => {
 		getDeck();
 
 		return () => {
 			abortController.abort();
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	
+	/**
+	 * Fetches the current deck from the database.
+	 */
 	async function getDeck() {
 		if(type === "deck" && !edit) return;
 
@@ -34,6 +39,7 @@ function Form({ type, edit, addDeck, addCard, editDeck, editCard, abortControlle
 			const response = await readDeck(deckId, abortController.signal);
 			setDeck(response);
 
+			// update values if we are editing existing items
 			if(edit) {
 				if(response && type === "deck") {
 					initForm[keys[0]] = response.name;
@@ -56,10 +62,19 @@ function Form({ type, edit, addDeck, addCard, editDeck, editCard, abortControlle
 		}
 	}
 
+	/**
+	 * Handles any form change made by the user.
+	 * @param {Event} event - onChange event.
+	 * @param {EventTarget} target - The element from which this change occured.
+	 */
 	function handleChange({ target }) {
 		setFormData({...formData, [target.name]: target.value});
 	}
 
+	/**
+	 * Handles any submit made by the user.
+	 * @param {Event} event - submit event.
+	 */
 	async function handleSubmit(event) {
 		event.preventDefault();
 		let newItem = {
@@ -67,6 +82,7 @@ function Form({ type, edit, addDeck, addCard, editDeck, editCard, abortControlle
 			[keys[1]]: formData[keys[1]],
 		};
 
+		// if edit -> make sure that item has appropriate id keys.
 		if(edit) {
 			newItem["id"] = type === "deck" ? parseInt(deckId) : parseInt(cardId);
 
@@ -75,10 +91,12 @@ function Form({ type, edit, addDeck, addCard, editDeck, editCard, abortControlle
 			}
 		}
 
+		// call appropriate function
 		const idx = edit ?
 			(type === "deck" ? await editDeck(newItem) : await editCard(newItem)) :
 			(type === "deck" ? await addDeck(newItem) : await addCard(newItem, deckId));
-	
+
+		// if new deck -> get id	
 		if(!edit && type === "deck") {
 			deckId = idx;
 		}

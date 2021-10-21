@@ -1,5 +1,5 @@
 import React from "react";
-import Proptypes from "prop-types"
+import PropTypes from "prop-types";
 
 function Buttons({ names, deckId, cardId, removeDeck, removeCard }) {
 	const buttonsJSX = [];
@@ -116,13 +116,13 @@ function Buttons({ names, deckId, cardId, removeDeck, removeCard }) {
 }
 
 Buttons.propTypes = {
-    names: Proptypes.arrayOf(PropTypes.oneOf(
-        ["view", "study", "delete-deck", "delete-card", "edit-deck", "edit-card", "add-deck", "add-card"]
-    )).isRequired,
-    deckId: PropTypes.number,
-    cardId: PropTypes.number,
-    removeDeck: PropTypes.func,
-    removeCard: PropTypes.func
-}
+	names: PropTypes.arrayOf(PropTypes.oneOf(
+		["view", "study", "delete-deck", "delete-card", "edit-deck", "edit-card", "add-deck", "add-card"]
+	)).isRequired, 
+	deckId: PropTypes.number, 
+	cardId: PropTypes.number, 
+	removeDeck: PropTypes.func, 
+	removeCard: PropTypes.func,
+};
 
-export default Buttons
+export default Buttons;

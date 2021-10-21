@@ -1,39 +1,47 @@
 import React from "react";
-import Proptypes from "prop-types"
+import PropTypes from "prop-types";
 
-function Breadcrumb({ page, deckName, deckId, cardId}) {
-    const currentPage = () => {
-        switch(page) {
-            case "study":
-                return <li className="breadcrumb-item active">Study</li>;
-            case "create-deck":
-                return <li className="breadcrumb-item active">Create Deck</li>;
-            case "edit-deck":
-                return <li className="breadcrumb-item active">Edit Deck</li>;
-            case "create-card":
-                return <li className="breadcrumb-item active">Add Card</li>;
-            case "edit-card":
-                return <li className="breadcrumb-item active">Edit Card</li>;
-            default:
-                return null;
-        }
-    }
+function Breadcrumb({ page, deckName, deckId, cardId }) {
+	/**
+	 * Gets the appropriate text based off of their current page.
+	 * @returns {ReactElement} JSX of an <li> element.
+	 */
+	const currentPage = () => {
+		switch(page) {
+			case "study":
+				return <li className="breadcrumb-item active">Study</li>;
+			case "create-deck":
+				return <li className="breadcrumb-item active">Create Deck</li>;
+			case "edit-deck":
+				return <li className="breadcrumb-item active">Edit Deck</li>;
+			case "create-card":
+				return <li className="breadcrumb-item active">Add Card</li>;
+			case "edit-card":
+				return <li className="breadcrumb-item active">Edit Card {cardId}</li>;
+			default:
+				return null;
+		}
+	};
 
-    const deckTitle = () => {
-        if(!deckName || !deckId) return null;
+	/**
+	 * Gets the deck title and adds the active class if appropriate.
+	 * @returns {ReactElement} JSX of an <li> element.
+	 */
+	const deckTitle = () => {
+		if(!deckName || !deckId) return null;
 
-        return (
-            <li className={`breadcrumb-item ${page === "view" ? "active" : ""}`}>
-                {page === "view" ? "deckName" :
-                   <a href={`/decks/${deckId}`}>
-                       {deckName}
-                    </a>
-                }
-            </li>
-        )
-    }
+		return (
+			<li className={`breadcrumb-item ${page === "view" ? "active" : ""}`}>
+				{page === "view" ? deckName :
+					<a href={`/decks/${deckId}`}>
+						{deckName}
+					</a>
+				}
+			</li>
+		);
+	};
 
-    return (
+	return (
 		<div id="deck-study">
 			<nav aria-label="breadcrumb">
 				<ol className="breadcrumb">
@@ -54,10 +62,10 @@ function Breadcrumb({ page, deckName, deckId, cardId}) {
 }
 
 Breadcrumb.propTypes = {
-    page: PropTypes.string.isRequired,
-    deckName: PropTypes.string,
-    deckId: PropTypes.number,
-    cardId: PropTypes.number
-}
+	page: PropTypes.string.isRequired,
+	deckName: PropTypes.string,
+	deckId: PropTypes.number,
+	cardId: PropTypes.number,
+};
 
-export default Breadcrumb
+export default Breadcrumb;
