@@ -43,7 +43,8 @@ function stripCards(deck) {
 
 async function fetchJson(url, options, onCancel) {
   try {
-    const response = await fetch(url, options);
+    
+   const response = await fetch(url, options);
 
     if (response.status < 200 || response.status > 399) {
       throw new Error(`${response.status} - ${response.statusText}`);
@@ -142,6 +143,20 @@ export async function deleteDeck(deckId, signal) {
   const url = `${API_BASE_URL}/decks/${deckId}`;
   const options = { method: "DELETE", signal };
   return await fetchJson(url, options);
+}
+
+/**
+ * Retrieves all cards associated with the specified `deckId`.
+ * @param deckId
+ *  the id of the target deck
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<Error|*>}
+ *  a promise that resolves to a possible empty array of cards.
+ */
+export async function listCards(deckId, signal) {
+  const url = `${API_BASE_URL}/cards?deckId=${deckId}`;
+  return await fetchJson(url, { signal }, []);
 }
 
 /**
