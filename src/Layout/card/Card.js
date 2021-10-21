@@ -25,10 +25,10 @@ Card.propTypes = {
         "name": PropTypes.string.isRequired,
         "description": PropTypes.string.isRequired,
         "id": PropTypes.string.isRequired
-    })
-    cardNum: PropTypes.number.isRequired
-    flipped: PropTypes.bool.isRequired
-    flip: PropTypes.func.isRequired
+    }),
+    cardNum: PropTypes.number.isRequired,
+    flipped: PropTypes.bool.isRequired,
+    flip: PropTypes.func.isRequired,
     next: PropTypes.func.isRequired
 }
 
