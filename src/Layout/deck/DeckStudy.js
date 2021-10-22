@@ -21,6 +21,7 @@ function DeckStudy({ abortController }) {
 		return () => {
 			abortController.abort();
 		};
+		// eslint-disable-next-line
 	}, []);
 	
 	async function getDeck() {
